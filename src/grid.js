@@ -1,69 +1,39 @@
-// http://vasir.net/blog/game_development/dijkstras_algorithm_shortest_path
+//http://bl.ocks.org/sdjacobs/3900867adc06c7680d48
 import * as d3 from "d3";
 
-class Grid {
-    constructor(data, columns, rows, size = 50){
-        this.colsCount = columns;
-        this.rowsCount = rows;
-        this.size = size;
+import gridData from './grid-data';
+import GraphDrawer from './graph-drawer';
+import GridDrawer from './grid-drawer';
+import DijkstraRunner from './dijkstra-runner';
 
-        this.data = data;
-        
-        this.createSvg();
-
-        this.build();
-        this.enableMouse();
-    }
+function run(){
+    let data = gridData(20, 20);
     
-    createSvg(){
-        this.svg = d3.select("body")
-            .append("svg")
-            .attr("class", "world")
-            .attr("width", this.size * this.colsCount)
-            .attr("height", this.size * this.rowsCount);
-    }
-    
-    build(){
-        let columns = this.svg
-            .selectAll('rect')
-            .data(this.data)
-            .enter().append('rect')
+    //let graphDrawer = new GraphDrawer(data.graph, 5);
+    let gridDrawer = new GridDrawer(data.grid, 20);
 
-        columns
-            .attr("class", (d, index) => 'world__cell' )
-            .attr("width", this.size)
-            .attr("height", this.size)
-            .attr("x", (d, i) => d.column * this.size)
-            .attr("y", (d, i) => d.row * this.size)
-        
-        this.columnsSelector = columns;
-    }
+    let dijkstra = new DijkstraRunner(data.graph)
+    dijkstra.start();
     
-    enableMouse(){
-        this.svg.on("mousedown", () => {
-            this.columnsSelector.on('mousemove',  function(d, i){
-                d3.select(this).style('fill','red');
-                d.walkable = false;
-            });
-        });
+    dijkstra.events.on('update', wakeup);
+    gridDrawer.events.on('update', wakeup);
 
-        this.svg.on("mouseup", () => this.columnsSelector.on('mousemove', null));
-    }
+    window.addEventListener('keyup', event => {
+        if(event.keyCode == 83) { //key s
+            dijkstra.run();
+        }
+        if(event.keyCode == 88) {//key x
+            dijkstra.step();
+            //graphDrawer.wakeup();
+        }
+    })
 
-    update(){
-       this.svg.selectAll('rect')
-            .style('fill', data => data.walkable ? 'white' : 'blue');
+    function wakeup(){
+        gridDrawer.tick();
+        //graphDrawer.wakeup();
     }
-    
+    //dijkstra(data.graph, graphDrawer)
+
 }
 
-let run = function(){
-    let data = generateGridData(colsCount, rowsCount);
-    let grid = new Grid(data);
-
-    d3.interval(function(){
-        grid.update();
-    }, 1500);
-}
-
-export { run, Grid }
+export default { run }

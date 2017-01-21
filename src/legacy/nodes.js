@@ -89,7 +89,6 @@ class NodeSimulation {
         this.width = 800;
         this.height = 800;
         this.graph = graph; 
-        console.log('this.graph', this.graph);
         this.tick = this.tick.bind(this);
 
         this.init();

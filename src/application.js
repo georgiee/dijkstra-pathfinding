@@ -1,3 +1,4 @@
-import djikstra from './djikstra';
+import dijkstra from './dijkstra';
+import grid from './grid';
 
-window.onload = e => djikstra.run();
+window.onload = e => grid.run();

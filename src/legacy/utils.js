@@ -90,7 +90,6 @@ class GridData {
         while( index  < cellCount) {
             let neighbours = this.getNeighbours(index);
             let cell = this.fromIndex(index);
-            console.log('neighbours, ', neighbours);
             graph.nodes.push({
                 name: `${cell.row}/${cell.column}`, index 
             });
@@ -98,8 +97,6 @@ class GridData {
 
             index++;
         }
-
-        console.log('graph.link', graph.links)
 
         return graph;
     }

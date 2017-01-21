@@ -51,7 +51,7 @@ class NodeSimulator {
         this.nodeSelector.append("text")
             .attr("dx", 12)
             .attr("dy", ".35em")
-            .text(function(d) { return d.name });
+            .text(function(d) { return d.id });
 
         this.linkSelector = this.linkSelector.data(this.graph.links);
         this.linkSelector.exit().remove();
@@ -61,6 +61,7 @@ class NodeSimulator {
         this.simulation.force("link").links(this.graph.links);
         this.simulation.alpha(1).restart();
     }
+    
     buildSvg(){
         let svg = d3.select("body")
                     .append("svg")
@@ -71,8 +72,8 @@ class NodeSimulator {
     
     createSimulation(){
         let simulation = d3.forceSimulation()
-                    .force("link", d3.forceLink())
-                    .force("charge", d3.forceManyBody().theta(0.5).strength(-90).distanceMax(80))
+                    .force("link", d3.forceLink().id(d => d.id) )
+                    .force("charge", d3.forceManyBody().theta(0.5).strength(-200).distanceMax(80))
                     .force("center", d3.forceCenter(this.width / 2, this.height / 2));
 
         this.simulation = simulation;
@@ -80,7 +81,6 @@ class NodeSimulator {
     
     init(){
         this.createSimulation();
-        console.log('this.graph.nodes', this.graph.nodes)
         this.simulation
             .nodes(this.graph.nodes)
             .on("tick", this.tick);

@@ -6,6 +6,10 @@
         margin: 0;   
         padding: 0;
     }
+    svg text {
+      cursor: default;
+      user-select: none;
+    }
 
     canvas {
       image-rendering: optimizeSpeed;             /* Older versions of FF          */
@@ -37,11 +41,46 @@
     .world {
 
     }
-    .world__cell {
+    .world__cell rect{
       fill: #fff;
       stroke: #333;
     }
+      
+    .node circle {
+      fill: #aaa;
+    }
+    
+    .node.is-tentative circle {
+      stroke: blue;
+      stroke-width: 4px;
+      stroke-dasharray: 2;
+      fill: none;
+    }
+    
+    .node.is-obstacle circle {
+      stroke: #000;
+      stroke-width: 2px;
+      stroke-dasharray: 2;
+      fill: #333 !important;
+    }
 
+    .world__cell rect  {
+      fill: #aaa;
+    }
+
+    .world__cell.is-tentative rect {
+      stroke: blue;
+      stroke-width: 4px;
+      stroke-dasharray: 2;
+      fill: blue;
+    }
+    
+    .world__cell.is-obstacle rect {
+      stroke: #000;
+      stroke-width: 2px;
+      stroke-dasharray: 2;
+      fill: #333 !important;
+    }
 </style>
 
 <body>
