@@ -37,6 +37,14 @@ class GridDrawer {
         this.enableMouse();
     }
     
+    showPath(cells){
+        console.log('showPath', cells)
+        let columns = this.svg
+            .selectAll('.world__cell')
+            .data(cells, d => d.id)
+            .classed("is-path", true)
+    }
+    
     addCells(){
         let columns = this.svg
             .selectAll('.world__cell')

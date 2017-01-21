@@ -17,6 +17,7 @@
   "dependencies": {
     "d3": "^4.4.1",
     "d3-scale-chromatic": "^1.1.0",
-    "graph-data-structure": "^0.8.0"
+    "graph-data-structure": "^0.8.0",
+    "lodash": "^4.17.4"
   }
 }
