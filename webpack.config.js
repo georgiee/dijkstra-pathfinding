@@ -17,8 +17,9 @@ var defaults = {
   },
   
   output: {
-      publicPath: '/',
-      filename: 'application.js'
+    path: development ? '/': '/build/',
+    publicPath: '/',
+    filename: 'application.js'
   },
   
   module: {
@@ -51,7 +52,7 @@ var defaults = {
 
 var config = defaults;
 
-if(production){
+if(production && false){
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       compress: {

@@ -43,6 +43,8 @@ class GridDrawer {
             .selectAll('.world__cell')
             .data(cells, d => d.id)
             .classed("is-path", true)
+
+        this.tick();
     }
     
     addCells(){
@@ -83,16 +85,22 @@ class GridDrawer {
     
     enableMouse(){
         let self = this;
+
+        this.columnsSelector.on('mousedown',  function(d, i){
+            d.obstacle = !d.obstacle;
+            self.events.call('update');
+        });
+
         this.svg.on("mousedown", () => {
-            this.columnsSelector.on('mousemove',  function(d, i){
+            this.columnsSelector.on('mouseenter',  function(d, i){
                 d3.select(this).style('fill','red');
-                d.obstacle = true;
+                d.obstacle = !d.obstacle;
 
                 self.events.call('update');
             });
         });
 
-        this.svg.on("mouseup", () => this.columnsSelector.on('mousemove', null));
+        this.svg.on("mouseup", () => this.columnsSelector.on('mouseenter', null));
     }
 
 

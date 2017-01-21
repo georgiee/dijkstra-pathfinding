@@ -1,4 +1,6 @@
 import * as d3 from "d3";
+var TimSort = require('timsort');
+
 
 export default class DijkstraRunner {
     constructor(graph, links){
@@ -9,9 +11,16 @@ export default class DijkstraRunner {
         this.links = graph.links;
 
         this.step = this.step.bind(this);
+        this.stepMeasured = this.stepMeasured.bind(this);
     }
 
-    
+    stepMeasured(){
+        var t0 = performance.now();
+        this.step();
+        var t1 = performance.now();
+        //console.log("Stepp call duraiton " + (t1 - t0) + " milliseconds.")
+    }
+
     step(){
         this.events.call('update');
         this.current.visited = true;
@@ -45,8 +54,7 @@ export default class DijkstraRunner {
             return;
         }
         
-        //sort to access by minimal distance
-        this.unvisited.sort(function(a, b) {
+        TimSort.sort(this.unvisited, function(a, b) {
             return b.distance - a.distance 
         });
 
@@ -91,6 +99,6 @@ export default class DijkstraRunner {
     }
     run(){
         this.reset();
-        this.timer = d3.timer(this.step);   
+        this.timer = d3.timer(this.stepMeasured);   
     }
 }

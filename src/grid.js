@@ -10,7 +10,7 @@ import DijkstraRunner from './dijkstra-runner';
 function run(){
     let data = gridData(30, 30);
     
-    //let graphDrawer = new GraphDrawer(data.graph, 5);
+    //let graphDrawer = new GraphDrawer(data.graph, 20);
     let gridDrawer = new GridDrawer(data.grid, 20);
 
     let dijkstra = new DijkstraRunner(data.graph)
@@ -60,7 +60,6 @@ function run(){
         gridDrawer.tick();
         //graphDrawer.wakeup();
     }
-    //dijkstra(data.graph, graphDrawer)
 
 }
 

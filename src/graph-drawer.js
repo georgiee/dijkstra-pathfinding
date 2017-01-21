@@ -80,7 +80,7 @@ class GraphDrawer {
                 return "translate("+ x + ","+ y +")";
             })
         
-        this.nodeSelector.append("circle").attr("r", 2);
+        this.nodeSelector.append("circle").attr("r", 10);
         /*this.nodeSelector.append("text")
             .attr("dx", 12)
             .attr("class", "text-label")
@@ -99,9 +99,12 @@ class GraphDrawer {
         this.linkSelector.exit().remove();
         this.linkSelector = this.linkSelector.enter().append("line").merge(this.linkSelector);
 
-        this.simulation.nodes(this.graph.nodes);
-        this.simulation.force("link").links(this.graph.links);
-        this.simulation.alpha(1).restart();
+        if(this.simulation){
+            this.simulation.nodes(this.graph.nodes);
+            this.simulation.force("link").links(this.graph.links);
+            this.simulation.alpha(1).restart();    
+        }
+        
 
         this.nodeSelector.on("click", function(d) {
             d.obstacle = !d.obstacle;
@@ -128,22 +131,23 @@ class GraphDrawer {
         let simulation = d3.forceSimulation()
                     .force("link", d3.forceLink().id(d => d.index) )
                     //.force("link", d3.forceLink().id(d => d.id) )
-                    .force("charge", d3.forceManyBody().theta(0.1).strength(-10).distanceMax(this.distance))
+                    .force("charge", d3.forceManyBody().theta(0.1).strength(-30).distanceMax(this.distance))
                     .force("center", d3.forceCenter(this.width / 2, this.height / 2));
+
+        simulation
+            .nodes(this.graph.nodes)
+            .on("tick", this.tick);
+
+        simulation
+            .force("link")
+            .links(this.graph.links);
 
         this.simulation = simulation;
     }
     
     init(){
         this.createSimulation();
-        this.simulation
-            .nodes(this.graph.nodes)
-            .on("tick", this.tick);
-
-        this.simulation
-            .force("link")
-            .links(this.graph.links);
-
+        
         this.linkSelector = this.svg.append("g")
                     .attr("class", "links")
                     .selectAll("line");
@@ -154,7 +158,12 @@ class GraphDrawer {
     }
     
     wakeup(){
-        this.simulation.restart();
+        if(this.simulation){
+            this.simulation.restart();
+        }else {
+            this.tick();
+        }
+
     }
 
     tick(){
